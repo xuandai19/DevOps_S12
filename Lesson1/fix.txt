@@ -1,0 +1,18 @@
+Thông báo lỗi:nginx: [emerg] unexpected "proxy_set_header" in /etc/nginx/sites-enabled/app.conf:7
+
+Nguyên nhân là do thiếu dấu chấm phẩy (;) ở cuối chỉ thị proxy_pass http://localhost:8080 tại dòng 6 trong file /etc/nginx/sites-enabled/app.conf.
+
+Trong cú pháp của Nginx, mọi chỉ thị đơn (simple directive) đều phải kết thúc bằng dấu ;. Khi thiếu dấu ; ở dòng 6, trình phân tích cấu hình của Nginx đọc tiếp sang dòng 7 và gặp từ khóa proxy_set_header trong khi chưa kết thúc câu lệnh trước đó, nên báo lỗi unexpected "proxy_set_header".
+
+Lệnh kiểm tra cấu hình và reload Nginx
+Chạy lệnh kiểm tra cú pháp cấu hình trước khi áp dụng thay đổi:
+
+Bash
+sudo nginx -t
+Cách xác nhận thành công: Terminal hiển thị thông báo syntax is ok và test is successful.
+
+Sau khi cấu hình hợp lệ, thực hiện reload để Nginx áp dụng cấu hình mới mà không ngắt kết nối hiện tại:
+
+Bash
+sudo systemctl reload nginx
+Cách xác nhận thành công: Chạy sudo systemctl status nginx và thấy trạng thái active (running) mà không có thông báo lỗi mới.

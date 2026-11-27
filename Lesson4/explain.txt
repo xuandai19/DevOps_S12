@@ -1,0 +1,6 @@
+Cơ chế ngăn chặn truy cập trái phép
+Giới hạn ở loopback (127.0.0.1): Socket của container chỉ nhận gói tin gửi tới địa chỉ 127.0.0.1:8080 nội bộ trên host, không nhận kết nối từ card mạng public (eth0 / IP LAN).
+
+Nginx vẫn kết nối bình thường: Nginx chạy trực tiếp trên cùng máy chủ có thể proxy_pass [http://127.0.0.1:8080](http://127.0.0.1:8080) (hoặc localhost:8080 khi trỏ 127.0.0.1) để chuyển tiếp traffic tới Spring Boot.
+
+Chặn kết nối từ bên ngoài: Gói tin từ internet hoặc mạng ngoài đi vào cổng 8080 không thể tới socket 127.0.0.1:8080 của Docker, ngay cả khi có độ ưu tiên iptables cao hơn UFW.

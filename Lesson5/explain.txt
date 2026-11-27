@@ -1,0 +1,20 @@
+1. Pipeline câu lệnh Linux
+
+bash
+grep ' 404 ' /var/log/nginx/access.log | awk '{print $1}' | sort | uniq -c | sort -nr | head -n 5
+
+Áp dụng với dữ liệu mẫu của bài toán, kết quả trả về sẽ có dạng:
+
+2. Tác dụng của từng lệnh trong chuỗi pipeline
+
+grep ' 404 ' /var/log/nginx/access.log: Lọc các dòng log có mã trạng thái HTTP 404 (có khoảng trắng hai bên để tránh khớp nhầm với số 404 nằm trong kích thước byte phản hồi, đường dẫn URI hoặc User-Agent).
+
+awk '{print $1}': Tách từng dòng theo khoảng trắng mặc định và in ra trường đầu tiên ($1), chính là địa chỉ IP của client (192.168.1.15, 10.0.0.5, ...).
+
+sort: Sắp xếp danh sách địa chỉ IP theo thứ tự bảng chữ cái để các IP giống nhau nằm liền kề nhau — điều kiện bắt buộc trước khi dùng uniq.
+
+uniq -c: Gộp các dòng trùng lặp liên tiếp và đếm số lần xuất hiện của từng địa chỉ IP (-c = count).
+
+sort -nr: Sắp xếp kết quả theo số đếm từ cao xuống thấp (-n = sắp xếp theo giá trị số, -r = đảo ngược thứ tự giảm dần).
+
+head -n 5: Lấy 5 dòng đầu tiên tương ứng với Top 5 địa chỉ IP có nhiều lỗi 404 nhất.

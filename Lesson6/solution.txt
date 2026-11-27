@@ -1,0 +1,12 @@
+Giải pháp cô lập và cơ chế Docker DNS
+Cô lập mạng nội bộ (không publish port): Chỉ gateway có mục ports: - "80:80" để nhận traffic từ bên ngoài. Các service user-service, order-service và db không khai báo ports ra host nên không mở cổng trực tiếp ra ngoài thông qua port mapping của Docker.
+
+Giao tiếp qua custom bridge network: Khi tất cả service cùng thuộc app-network (driver bridge), Docker tạo một mạng ảo cô lập và tự động cấp IP nội bộ cho từng container trong dải subnet của network đó.
+
+Cách Nginx gọi user-service bằng Docker DNS:
+
+Trong custom network của Docker Compose, embedded DNS server tích hợp sẵn sẽ phân giải tên service (ví dụ user-service, order-service, db) thành địa chỉ IP nội bộ hiện tại của container tương ứng.
+
+Khi container user-service khởi động lại và nhận IP động mới, Docker DNS tự cập nhật bản ghi tương ứng mà không cần sửa file cấu hình Nginx.
+
+Trong cấu hình Nginx (nginx.conf), ta có thể trỏ trực tiếp tới tên service và cổng lắng nghe bên trong container (ví dụ proxy_pass http://user-service:8080;).

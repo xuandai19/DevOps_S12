@@ -1,0 +1,6 @@
+Ý nghĩa các thông số timeout
+proxy_connect_timeout (120s): Thời gian tối đa Nginx chờ để thiết lập kết nối TCP ban đầu tới backend (localhost:8080). Mặc định là 60s.
+
+proxy_send_timeout (120s): Thời gian tối đa giữa hai lần gửi dữ liệu liên tiếp từ Nginx sang backend. Mặc định là 60s.
+
+proxy_read_timeout (120s): Thời gian tối đa giữa hai lần đọc dữ liệu liên tiếp từ backend phản hồi về Nginx (đây là thông số quan trọng nhất khi Spring Boot xử lý lâu trước khi trả body response). Mặc định là 60s
